@@ -14,7 +14,8 @@ var gulp = require('gulp'),
     watch = require('gulp-watch'),
     runs = require('run-sequence'),
     clean = require('gulp-clean'),
-    injectPartials = require('gulp-file-include');
+    injectPartials = require('gulp-file-include'),
+    uncss = require('gulp-uncss');
 
 var targetPath = "../Public";
 
@@ -60,7 +61,7 @@ var paths = {
 
 // --------------------------------------------------------- INIT TASK //
 
-gulp.task('init', ['sass', 'js']);
+gulp.task('init', ['uncss', 'js']);
 
 // --------------------------------------------------------- SET TASK FOR WATCHER //
 
@@ -77,7 +78,21 @@ gulp.task('clean-js', function () {
   return gulp.src(path.join(__dirname, targetPath + '/assets/js/app.min.js'), {read: false})
     .pipe(clean({force: true}));
 });
+gulp.task('clean-csspages', function () {
+  return gulp.src(path.join(__dirname, targetPath + '/assets/css/pages/*.css'), {read: false})
+    .pipe(clean({force: true}));
+});
 // CLEANER
+
+//UNCSS
+gulp.task('uncss', ['sass'], function () {
+    return gulp.src('../assets/css/style.min.css')
+        .pipe(uncss({
+            html: ['./views/Pages/*.html']
+        }))
+        .pipe(gulp.dest('../assets/css/pages/'));
+});
+
 
 // copy HTML task
 gulp.task('html', function() {
@@ -125,7 +140,7 @@ gulp.task('sass', ['clean-sass'], function() {
             }
         }))
         .pipe(gulp.dest(path.join(__dirname, targetPath + '/assets/css/')))
-        .pipe(browserSync.stream())
+        .pipe(browserSync.stream());
 });
 
 // copy javascript task
@@ -157,7 +172,8 @@ gulp.task('js', ['clean-js'], function () {
 
 //Watcher active
 gulp.task('watch', function(){
-    watch(paths.sass, function() { runs('sass'); });
+    watch(path.join(__dirname, "sass/**/*.scss"), function() { runs('uncss'); });
+    watch(paths.sass, function() { runs('uncss'); });
     watch(paths.js, function() { runs('js'); });  
 });
 

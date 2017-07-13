@@ -25,6 +25,7 @@
     "gulp-sourcemaps": "^1.6.0",
     "gulp-uglifycss": "^1.0.6",
     "gulp-uglifyjs": "^0.6.2",
+    "gulp-uncss": "^1.0.6",
     "gulp-util": "^3.0.7",
     "gulp-watch": "^4.3.6",
     "merge-stream": "^1.0.1",
