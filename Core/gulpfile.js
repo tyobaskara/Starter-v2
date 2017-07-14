@@ -1,5 +1,3 @@
-"use strict";
-
 var gulp = require('gulp'),
     gutil = require('gulp-util'),
     sass = require('gulp-sass'),
@@ -17,7 +15,8 @@ var gulp = require('gulp'),
     runs = require('run-sequence'),
     clean = require('gulp-clean'),
     injectPartials = require('gulp-file-include'),
-    uncss = require('gulp-uncss');
+    uncss = require('gulp-uncss'),
+    nano = require('gulp-cssnano');
 
 var targetPath = "../Public";
 
@@ -86,15 +85,6 @@ gulp.task('clean-csspages', function () {
 });
 // CLEANER
 
-//UNCSS
-gulp.task('uncss', function () {
-    return gulp.src(path.join(__dirname, targetPath + '/assets/css/style.min.css'))
-        .pipe(uncss({
-            html: [path.join(__dirname, targetPath + '/index.html')]
-        }))
-        .pipe(gulp.dest(path.join(__dirname, targetPath + '/assets/css/pages/')));
-});
-
 // copy HTML task
 gulp.task('html', function() {
     return gulp.src(path.join(__dirname, "views/pages/*.html"))
@@ -111,6 +101,7 @@ gulp.task('html', function() {
 gulp.task('sass', ['clean-sass'], function() {
     return gulp.src([
     		//VENDOR
+            //'bower_components/bootstrap/dist/css/bootstrap.min.css',
             'sass/*bootstrap*/_bootstrap.scss',
 
             //PLUGINS
@@ -133,6 +124,7 @@ gulp.task('sass', ['clean-sass'], function() {
         }).on('error', sass.logError))
         .pipe(postcss([autoprefixer({ browsers: ['> 0%'] })]))       
         //.pipe(uglifycss())
+        //.pipe(nano())
         .pipe(sourcemaps.write(path.join(__dirname, targetPath + '/assets/css/maps'), {
             includeContent: false, 
             sourceRoot: path.join(__dirname, targetPath + '/assets/css/maps'),
@@ -193,3 +185,49 @@ gulp.task('default', ['init', 'html', 'watch'], function(){
 });
 
 gulp.task('development', ['init', 'watch']);
+
+
+
+
+
+//-----------TESTING------------//
+//UNCSS
+gulp.task('uncss', function () {
+    var plugins = [
+        uncss({
+            html: [path.join(__dirname, targetPath + '/index.html')]
+        }),
+    ];
+    return gulp.src(path.join(__dirname, targetPath + '/assets/css/style.min.css'))
+        .pipe(postcss(plugins))
+        .pipe(gulp.dest(path.join(__dirname, targetPath + '/assets/css/pages/')));
+});
+
+gulp.task('test', function () {
+    return gulp.src([
+            //VENDOR
+            'sass/*bootstrap*/_bootstrap.scss',
+
+            //PLUGINS
+            'bower_components/jcf/dist/css/theme-minimal/jcf.css',
+            //"bower_components/jcf/dist/css/demo.css,
+            'bower_components/slick-carousel/slick/slick.css',
+            'bower_components/slick-carousel/slick/slick-theme.css',
+            // FONT AWESOME CSS
+            'bower_components/font-awesome/css/font-awesome.css',
+            'plugins/**/*.css',
+
+            //CUSTOM
+            'sass/*.scss'
+        ])
+        .pipe(sass({
+          outputStyle: 'compressed',
+          includePaths: bourbon.includePaths
+        }).on('error', sass.logError))
+        .pipe(concat('test.css'))
+        // .pipe(uncss({
+        //     html: [path.join(__dirname, targetPath + '/index.html')]
+        // }))
+        .pipe(nano())
+        .pipe(gulp.dest('../Public/test/'));
+});
