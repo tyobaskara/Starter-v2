@@ -150,7 +150,8 @@ gulp.task('js', ['clean-js'], function () {
     	])
         .pipe(concat('app.min.js'))
         .pipe(uglifyjs())
-        .pipe(gulp.dest(path.join(__dirname, targetPath + '/assets/js/')));
+        .pipe(gulp.dest(path.join(__dirname, targetPath + '/assets/js/')))
+        //.pipe(browserSync.stream()); //uncomment to browser sync after js updated
 });
 
 // --------------------------------------------------------- SET SHOW WATCHER //

@@ -1,4 +1,9 @@
-
+* {
+    word-break: break-all;
+	&:active, &:focus, &:hover {
+		outline: none;
+	}
+}
 #site-container {
     width: 100%;
     height: 1000px; 
