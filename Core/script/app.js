@@ -1,5 +1,4 @@
 (function($){
 
- 	alert('oi');
 
 })(jQuery);
