@@ -1,5 +1,11 @@
+.bg-1 {
+    background: darkslateblue;
+}
+.bg-2 {
+    background: darkgrey;
+}
+
 .homepage {
-    min-height: 100%;
     h1 {
         color: green !important;
     }
@@ -10,5 +16,11 @@
         padding: 10px;
         border-style: inset;
         background: #f4f4f4;
+    }
+}
+
+.tslider {
+    .item {
+        margin: 10px 15px;
     }
 }
