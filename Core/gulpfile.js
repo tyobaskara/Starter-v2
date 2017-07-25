@@ -144,7 +144,8 @@ gulp.task('js', ['clean-js'], function() {
             'plugins/**/*.js',
 
             //APP
-            'script/*.js',
+            'script/global.js',
+            'script/app.js',
             'script/*Includes*/*.js'
         ])
         .pipe(concat('app.min.js'))
